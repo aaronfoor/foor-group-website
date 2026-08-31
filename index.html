@@ -2675,8 +2675,21 @@
   document.getElementById('closeNav').addEventListener('click', () => nav.classList.remove('open'));
   nav.querySelectorAll('a:not(.dropdown-trigger)').forEach(a => a.addEventListener('click', () => nav.classList.remove('open')));
 
-  // dropdown nav items now use native <details>/<summary> for mobile expand/collapse;
-  // desktop hover is handled purely via CSS, so no click JS is needed here anymore.
+ // desktop: hovering opens the dropdown; mobile keeps native tap-to-expand
+document.querySelectorAll('.nav-item.has-dropdown').forEach(item => {
+  item.addEventListener('mouseenter', () => {
+    if (window.innerWidth > 720) item.setAttribute('open', '');
+  });
+  item.addEventListener('mouseleave', () => {
+    if (window.innerWidth > 720) item.removeAttribute('open');
+  });
+  const trigger = item.querySelector('.dropdown-trigger');
+  if (trigger){
+    trigger.addEventListener('click', (e) => {
+      if (window.innerWidth > 720) e.preventDefault();
+    });
+  }
+});
 
   // hero slideshow — images injected as base64 data URIs
   const HERO_IMAGES = ["img_038.jpg", "img_020.jpg", "img_021.jpg", "img_022.jpg", "img_023.jpg", "img_024.jpg", "img_025.jpg", "img_026.jpg", "img_027.jpg", "img_028.jpg", "img_029.jpg", "img_030.jpg", "img_031.jpg", "img_032.jpg", "img_033.jpg", "img_034.jpg", "img_035.jpg", "img_036.jpg", "img_037.jpg", "img_039.jpg"];
